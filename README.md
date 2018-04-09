@@ -8,6 +8,7 @@ The plan is to create a MAAS with KVM instances, all running on a single host,
 with 7 network spaces to play with.
 
 The network spaces:
+
 | SPACE        | IFACE | CIDR         |
 | ------------ | ----- | ------------ |
 | juju         | br0   | 10.88.0.0/24 |
@@ -19,6 +20,7 @@ The network spaces:
 | workload     | br6   | 10.88.6.0/24 |
 
 The instances, and the spaces they'll be on:
+
 | NODE          | SPACES |
 | ------------- | ------ |
 | controller0   | juju |
