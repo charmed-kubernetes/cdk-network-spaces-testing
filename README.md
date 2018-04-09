@@ -1,6 +1,7 @@
 # CDK network spaces testing
 
-Documented test process and results for using Juju network spaces with the Canonical Distribution of Kubernetes.
+Documented process for testing Juju network spaces with the Canonical
+Distribution of Kubernetes, using a MAAS cluster whose nodes are KVM instances.
 
 ## The plan
 
