@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -eux
+
+# Create the KVM instances.
+# After running this, the nodes must be manually configured and commissioned in MAAS
+#virt-install --name controller0 --vcpus 4 --memory 4096 --disk size=16 --network bridge=br0 --pxe --boot network,hd
+#virt-install --name easyrsa0 --vcpus 4 --memory 4096 --disk size=16 --network bridge=br0 --pxe --boot network,hd
+#virt-install --name etcd0 --vcpus 4 --memory 4096 --disk size=16 --network bridge=br0 --network bridge=br1 --network bridge=br2 --pxe --boot network,hd
+#virt-install --name etcd1 --vcpus 4 --memory 4096 --disk size=16 --network bridge=br0 --network bridge=br1 --network bridge=br2 --pxe --boot network,hd
+#virt-install --name etcd2 --vcpus 4 --memory 4096 --disk size=16 --network bridge=br0 --network bridge=br1 --network bridge=br2 --pxe --boot network,hd
+#virt-install --name master0 --vcpus 4 --memory 4096 --disk size=16 --network bridge=br0 --network bridge=br2 --network bridge=br3 --network bridge=br4 --pxe --boot network,hd
+#virt-install --name loadbalancer0 --vcpus 4 --memory 4096 --disk size=16 --network bridge=br0 --network bridge=br4 --network bridge=br5 --pxe --boot network,hd
+virt-install --name worker0 --vcpus 4 --memory 4096 --disk size=16 --network bridge=br0 --network bridge=br2 --network bridge=br3 --network bridge=br4 --network bridge=br5 --network bridge=br6  --pxe --boot network,hd
+virt-install --name worker1 --vcpus 4 --memory 4096 --disk size=16 --network bridge=br0 --network bridge=br2 --network bridge=br3 --network bridge=br4 --network bridge=br5 --network bridge=br6  --pxe --boot network,hd
+virt-install --name worker2 --vcpus 4 --memory 4096 --disk size=16 --network bridge=br0 --network bridge=br2 --network bridge=br3 --network bridge=br4 --network bridge=br5 --network bridge=br6  --pxe --boot network,hd

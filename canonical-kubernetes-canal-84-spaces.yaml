@@ -1,0 +1,109 @@
+series: xenial
+description: A nine-machine Kubernetes cluster, appropriate for production. Includes a three-machine etcd cluster and three Kubernetes worker nodes.
+services:
+  canal:
+    annotations:
+      gui-x: '450'
+      gui-y: '750'
+    charm: cs:~containers/canal-29
+    options:
+      http_proxy: http://squid.internal:3128
+      https_proxy: https://squid.internal:3128
+    bindings:
+      "": juju
+      etcd: etcd-client
+      cni: flannel
+  easyrsa:
+    annotations:
+      gui-x: '450'
+      gui-y: '550'
+    charm: cs:~containers/easyrsa-38
+    constraints: "root-disk=8G spaces=juju,^etcd-peer,^etcd-client,^flannel,^apiserver,^loadbalancer,^workload"
+    num_units: 1
+    bindings:
+      "": juju
+  etcd:
+    annotations:
+      gui-x: '800'
+      gui-y: '550'
+    charm: cs:~containers/etcd-76
+    constraints: "root-disk=8G spaces=juju,etcd-peer,etcd-client,^flannel,^apiserver,^loadbalancer,^workload"
+    num_units: 3
+    options:
+      snap_proxy: https://squid.internal:3128
+    bindings:
+      "": juju
+      cluster: etcd-peer
+      db: etcd-client
+  kubeapi-load-balancer:
+    annotations:
+      gui-x: '450'
+      gui-y: '250'
+    charm: cs:~containers/kubeapi-load-balancer-56
+    constraints: "root-disk=8G spaces=juju,^etcd-peer,^etcd-client,^flannel,apiserver,loadbalancer,^workload"
+    expose: true
+    num_units: 1
+    bindings:
+      "": juju
+      apiserver: apiserver
+      website: loadbalancer
+  kubernetes-master:
+    annotations:
+      gui-x: '800'
+      gui-y: '850'
+    #charm: cs:~containers/kubernetes-master-101
+    charm: cs:~cynerva/kubernetes-master-108
+    constraints: "root-disk=16G spaces=juju,^etcd-peer,etcd-client,flannel,apiserver,^loadbalancer,^workload"
+    num_units: 1
+    options:
+      channel: 1.10/edge
+      snap_proxy: https://squid.internal:3128
+    bindings:
+      "": juju
+      etcd: etcd-client
+      cni: flannel
+      kube-api-endpoint: apiserver
+      kube-control: apiserver
+  kubernetes-worker:
+    annotations:
+      gui-x: '100'
+      gui-y: '850'
+    charm: cs:~containers/kubernetes-worker-113
+    constraints: "cores=4 mem=4G root-disk=16G spaces=juju,^etcd-peer,etcd-client,flannel,apiserver,loadbalancer,workload"
+    expose: true
+    num_units: 3
+    options:
+      channel: 1.10/edge
+      snap_proxy: https://squid.internal:3128
+      http_proxy: https://squid.internal:3128
+      https_proxy: https://squid.internal:3128
+    bindings:
+      "": juju
+      cni: flannel
+      kube-api-endpoint: loadbalancer
+      kube-control: apiserver
+relations:
+- - kubernetes-master:kube-api-endpoint
+  - kubeapi-load-balancer:apiserver
+- - kubernetes-master:loadbalancer
+  - kubeapi-load-balancer:loadbalancer
+- - kubernetes-master:kube-control
+  - kubernetes-worker:kube-control
+- - kubernetes-master:certificates
+  - easyrsa:client
+- - etcd:certificates
+  - easyrsa:client
+- - kubernetes-master:etcd
+  - etcd:db
+- - kubernetes-worker:certificates
+  - easyrsa:client
+- - kubernetes-worker:kube-api-endpoint
+  - kubeapi-load-balancer:website
+- - kubeapi-load-balancer:certificates
+  - easyrsa:client
+- - canal:etcd
+  - etcd:db
+- - canal:cni
+  - kubernetes-master:cni
+- - canal:cni
+  - kubernetes-worker:cni

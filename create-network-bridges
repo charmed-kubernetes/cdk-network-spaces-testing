@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -eux
+
+# Set up the virtual networks, for use by KVM instances
+for i in $(seq 0 6); do
+  sudo ip link add br$i type bridge
+  sudo ip link set br$i up
+  sudo ip addr add 10.88.$i.1/24 broadcast 10.88.$i.255 dev br$i
+done
+
+# set up nat, so VMs can talk to the outside world
+sudo iptables -t nat -A POSTROUTING -o eno1 -j MASQUERADE
