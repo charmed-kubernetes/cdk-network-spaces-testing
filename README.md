@@ -97,9 +97,9 @@ instance, do the following:
 2. Find the MAAS node with corresponding MAC addresses.
 3. Rename the node in MAAS to match the instance name.
 4. Set power configuration for the node:
-    1. Power type: Virsh (virtual systems)
-    2. Virsh address: qemu:///system
-    3. Virsh VM ID: <instance-name>
+    1. Power type: `Virsh (virtual systems)`
+    2. Virsh address: `qemu:///system`
+    3. Virsh VM ID: `<instance-name>`
 
 Once you have configured all the nodes, you can select them in MAAS and run the
 "Commission" action.
