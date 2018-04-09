@@ -109,6 +109,9 @@ the network interfaces to "Auto assign".
 
 ## Bootstrap the Juju controller
 
+You'll need to have access to the virtual networks to run Juju. The easiest
+option is to just install and run juju on the MAAS host.
+
 Use `juju add-cloud` and `juju add-credential` to add your MAAS info. Then,
 bootstrap:
 ```
