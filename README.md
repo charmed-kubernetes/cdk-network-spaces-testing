@@ -104,7 +104,7 @@ instance, do the following:
 Once you have configured all the nodes, you can select them in MAAS and run the
 "Commission" action.
 
-After commissioning completes, go into the node's configuration and set all of
+After commissioning completes, go into each node's configuration and set all of
 the network interfaces to "Auto assign".
 
 ## Bootstrap the Juju controller
