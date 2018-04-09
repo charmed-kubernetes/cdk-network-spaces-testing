@@ -61,7 +61,7 @@ sudo maas createadmin
 
 6. Log into GUI with admin credentials at `http://<maas-host>/MAAS`
 
-7. Configure upstream DNS (click Settings, scroll down to DNS)
+7. Configure upstream DNS (click Settings, scroll down to DNS).
 Use the DNS from the host's `/etc/resolv.conf`. You might also need to disable
 DNSSEC validation.
 
@@ -80,7 +80,9 @@ Also add the network to its corresponding space here.
 
 ## Creating the VMs
 
-Carefully review and run the create-vms script in this repo.
+Carefully review and run the create-vms script in this repo. Make sure the
+network interfaces for each machine line up with the spaces you defined in
+MAAS.
 
 ## Commissioning and configuring MAAS nodes
 
@@ -112,5 +114,6 @@ bootstrap:
 juju bootstrap my-maas my-maas --config test-mode=true
 ```
 
-## Deploy CDK
-See the bundle files in this repo.
+## Deploying CDK
+Deploy CDK with a custom bundle that specifies `spaces` constraints, and
+bindings. See the bundle files in this repo for examples.
