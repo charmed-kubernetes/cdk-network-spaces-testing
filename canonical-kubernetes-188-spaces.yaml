@@ -5,7 +5,7 @@ services:
     annotations:
       gui-x: '450'
       gui-y: '550'
-    charm: cs:~containers/easyrsa-38
+    charm: cs:~containers/easyrsa-39
     constraints: "root-disk=8G spaces=juju,^etcd-peer,^etcd-client,^flannel,^apiserver,^loadbalancer,^workload"
     num_units: 1
     bindings:
@@ -14,7 +14,7 @@ services:
     annotations:
       gui-x: '800'
       gui-y: '550'
-    charm: cs:~containers/etcd-76
+    charm: cs:~containers/etcd-77
     constraints: "root-disk=8G spaces=juju,etcd-peer,etcd-client,^flannel,^apiserver,^loadbalancer,^workload"
     num_units: 3
     options:
@@ -27,57 +27,50 @@ services:
     annotations:
       gui-x: '450'
       gui-y: '750'
-    charm: cs:~containers/flannel-51
+    charm: cs:~containers/flannel-52
     bindings:
       "": juju
-      etcd: etcd-client
       cni: flannel
   kubeapi-load-balancer:
     annotations:
       gui-x: '450'
       gui-y: '250'
-    charm: cs:~containers/kubeapi-load-balancer-56
+    charm: cs:~containers/kubeapi-load-balancer-57
     constraints: "root-disk=8G spaces=juju,^etcd-peer,^etcd-client,^flannel,apiserver,loadbalancer,^workload"
     expose: true
     num_units: 1
     bindings:
       "": juju
-      apiserver: apiserver
       website: loadbalancer
   kubernetes-master:
     annotations:
       gui-x: '800'
       gui-y: '850'
-    #charm: cs:~containers/kubernetes-master-101
-    charm: cs:~cynerva/kubernetes-master-108
+    charm: cs:~containers/kubernetes-master-102
     constraints: "root-disk=16G spaces=juju,^etcd-peer,etcd-client,flannel,apiserver,^loadbalancer,^workload"
     num_units: 1
     options:
-      channel: 1.10/edge
+      channel: 1.10/stable
       snap_proxy: https://squid.internal:3128
     bindings:
       "": juju
-      etcd: etcd-client
-      cni: flannel
       kube-api-endpoint: apiserver
       kube-control: apiserver
   kubernetes-worker:
     annotations:
       gui-x: '100'
       gui-y: '850'
-    charm: cs:~containers/kubernetes-worker-113
+    charm: cs:~containers/kubernetes-worker-114
     constraints: "cores=4 mem=4G root-disk=16G spaces=juju,^etcd-peer,etcd-client,flannel,apiserver,loadbalancer,workload"
     expose: true
     num_units: 3
     options:
-      channel: 1.10/edge
+      channel: 1.10/stable
       snap_proxy: https://squid.internal:3128
-      http_proxy: https://squid.internal:3128
+      http_proxy: http://squid.internal:3128
       https_proxy: https://squid.internal:3128
     bindings:
       "": juju
-      cni: flannel
-      kube-api-endpoint: loadbalancer
       kube-control: apiserver
 relations:
 - - kubernetes-master:kube-api-endpoint
