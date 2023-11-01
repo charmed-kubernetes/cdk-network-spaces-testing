@@ -1,3 +1,5 @@
+DEPRECATED: This process has not been tested or updated in over 5 years.
+
 # CDK network spaces testing
 
 Documented process for testing Juju network spaces with the Canonical
